@@ -32,31 +32,34 @@ addEventListener("keyup", function (e) {
   work(e.key);
 });
 
-async function work(keyPressed) {
-  if (isLetter(keyPressed)) {
-    addLetter(keyPressed);
-  } else {
+function work(keyPressed) {
+  if (isLetter(keyPressed)) addLetter(keyPressed);
+  else {
     switch (keyPressed) {
       case "Enter":
-        if (word.length === 5) {
-          try {
-            if (await validateWord()) {
-              valid();
-              if (isItRight()) {
-                alert("you win!!");
-                canRemove = 0;
-              } else hasLetters(keyPressed);
-            } else {
-              notValid();
-            }
-          } catch (e) {
-            console.error(e);
-          }
-        }
+        handleEnter(keyPressed);
         break;
       case "Backspace":
-        removeLastLetter();
+        handleBackspace();
         break;
+    }
+  }
+
+  async function handleEnter(keyPressed) {
+    if (word.length !== 5) return;
+    try {
+      if (await validateWord()) {
+        valid();
+        if (!didWin()) {
+          hasLetters();
+          isGameOver();
+          newWord(keyPressed);
+        }
+      } else {
+        notValid();
+      }
+    } catch (e) {
+      console.error(e);
     }
   }
 
@@ -67,36 +70,41 @@ async function work(keyPressed) {
   console.log(`wordOfTheDay:${wordOfTheDay}`);
 }
 
-function hasLetters(keyPressed) {
-  console.log(`word from hasLetters:${word}`);
-
-  for (let i = filledCells - 5; i < filledCells; i++) {
-    let mappedIndex = i - (filledCells - 5);
-
-    for (let j = 0; j < 5; j++) {
-      if (gridItems[i].textContent === wordOfTheDay[j] && mappedIndex === j) {
-        gridItems[i].style.backgroundColor = "green";
-        break; // Correct letter, correct position
-      }
-      // If the character matches but the position is different
-      else if (
-        gridItems[i].textContent === wordOfTheDay[j] &&
-        mappedIndex !== j
-      ) {
-        gridItems[i].style.backgroundColor = "rgb(190, 190, 43)"; // Correct letter, wrong position
-      }
-    }
+function isGameOver() {
+  if (filledCells === 30) {
+    alert("game over!!, you lost");
+    canRemove = 0;
+    return;
   }
-  newWord(keyPressed);
 }
 
-function isItRight() {
-  if (word === wordOfTheDay) {
+function didWin() {
+  if (word !== wordOfTheDay) return false;
+  else {
     for (let i = filledCells - 5; i < filledCells; i++) {
       gridItems[i].style.backgroundColor = "green";
     }
+    alert("you win!!");
+    canRemove = 0;
     return true;
-  } else return false;
+  }
+}
+
+function hasLetters() {
+  for (let i = filledCells - 5; i < filledCells; i++) {
+    let mappedIndex = i - (filledCells - 5);
+    for (let j = 0; j < 5; j++) {
+      if (gridItems[i].textContent === wordOfTheDay[j] && mappedIndex === j) {
+        gridItems[i].style.backgroundColor = "green";
+        break;
+      } else if (
+        gridItems[i].textContent === wordOfTheDay[j] &&
+        mappedIndex !== j
+      ) {
+        gridItems[i].style.backgroundColor = "rgb(190, 190, 43)";
+      }
+    }
+  }
 }
 
 function valid() {
@@ -104,6 +112,7 @@ function valid() {
     gridItems[i].style.borderColor = "inherit";
   }
 }
+
 function notValid() {
   for (let i = filledCells - 5; i < filledCells; i++) {
     gridItems[i].style.borderColor = "red";
@@ -131,7 +140,7 @@ function isLetter(letter) {
   return /^[a-zA-Z]$/.test(letter);
 }
 
-function removeLastLetter() {
+function handleBackspace() {
   if (canRemove > 0) {
     gridItems[filledCells - 1].textContent = "";
     filledCells--;
