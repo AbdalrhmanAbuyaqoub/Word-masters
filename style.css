@@ -4,19 +4,19 @@
 body {
   padding: 0;
   margin: 0;
-  background-color: #232136;
+  background-color: beige;
 }
 .page-title {
   height: fit-content;
   width: fit-content;
   margin: auto;
-  border-bottom: 2px solid #e0def4;
+  border-bottom: 2px solid black;
   font-size: 36px;
   padding: 30px 40px;
   margin-bottom: 60px;
   font-family: monospace;
   font-weight: bold;
-  color: #e0def4;
+  color: black;
 }
 .container {
   /* to center the container (you cannot center a div using margin without specifying height and width)*/
@@ -35,14 +35,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 3px solid #e0def4;
+  border: 3.5px solid #d1d1d2;
   font-size: 32px;
   font-weight: bold;
   font-family: Arial;
   text-align: center;
-  color: #e0def4;
-  background-color: #747474;
-  /* background-color: rgb(190, 190, 43); */
 }
 
 /* .cell:nth-child(-1n + 5) {

@@ -82,7 +82,7 @@ function didWin() {
   if (word !== wordOfTheDay) return false;
   else {
     for (let i = filledCells - 5; i < filledCells; i++) {
-      gridItems[i].style.backgroundColor = "green";
+      colorCell(i, "green");
     }
     alert("you win!!");
     canRemove = 0;
@@ -94,14 +94,13 @@ function hasLetters() {
   for (let i = filledCells - 5; i < filledCells; i++) {
     let mappedIndex = i - (filledCells - 5);
     for (let j = 0; j < 5; j++) {
-      if (gridItems[i].textContent === wordOfTheDay[j] && mappedIndex === j) {
-        gridItems[i].style.backgroundColor = "green";
-        break;
-      } else if (
-        gridItems[i].textContent === wordOfTheDay[j] &&
-        mappedIndex !== j
-      ) {
-        gridItems[i].style.backgroundColor = "rgb(190, 190, 43)";
+      if (gridItems[i].textContent === wordOfTheDay[j]) {
+        if (mappedIndex === j) {
+          colorCell(i, "green");
+          break;
+        } else {
+          colorCell(i, "#daa520");
+        }
       }
     }
   }
@@ -109,7 +108,7 @@ function hasLetters() {
 
 function valid() {
   for (let i = filledCells - 5; i < filledCells; i++) {
-    gridItems[i].style.borderColor = "inherit";
+    gridItems[i].style.borderColor = "";
   }
 }
 
@@ -148,4 +147,8 @@ function handleBackspace() {
     canRemove--;
     word = word.slice(0, -1);
   }
+}
+
+function colorCell(index, color) {
+  gridItems[index].style.backgroundColor = color;
 }
