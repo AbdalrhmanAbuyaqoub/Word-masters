@@ -13,7 +13,7 @@ const VALIDATE_WORD_URL = "https://words.dev-apis.com/validate-word";
 async function getWordOfTheDay() {
   const promiseFromApi = await fetch(WORD_OF_THE_DAY_URL);
   const response = await promiseFromApi.json();
-  wordOfTheDay = response.word;
+  wordOfTheDay = response.word.toUpperCase();
 }
 getWordOfTheDay();
 
@@ -29,17 +29,18 @@ async function validateWord() {
 }
 
 addEventListener("keyup", function (e) {
-  work(e.key);
+  keyPressed = e.key.toUpperCase();
+  work(keyPressed);
 });
 
 function work(keyPressed) {
   if (isLetter(keyPressed)) addLetter(keyPressed);
   else {
     switch (keyPressed) {
-      case "Enter":
+      case "ENTER":
         handleEnter(keyPressed);
         break;
-      case "Backspace":
+      case "BACKSPACE":
         handleBackspace();
         break;
     }
@@ -126,7 +127,7 @@ function newWord(keyPressed) {
 }
 
 function addLetter(inputLetter) {
-  if (count < 5 && inputLetter !== "Enter") {
+  if (count < 5 && inputLetter !== "ENTER") {
     gridItems[filledCells].textContent = inputLetter;
     filledCells++;
     count++;
